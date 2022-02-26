@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on Statistical Genetics</title>
+    <link>https://Hardy-Lab-Statistical-Genetics.github.io/page/</link>
+    <description>Recent content in Pages on Statistical Genetics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/page/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Archives</title>
+      <link>https://Hardy-Lab-Statistical-Genetics.github.io/archives/</link>
+      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://Hardy-Lab-Statistical-Genetics.github.io/archives/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://Hardy-Lab-Statistical-Genetics.github.io/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://Hardy-Lab-Statistical-Genetics.github.io/</guid>
+      <description>aliases:
+ about contact date: &amp;ldquo;2022-02-26&amp;rdquo; license: CC BY-NC-ND toc: false menu: main: pre: user weight: -90 title: About Us   Statistical Genetics Laboratory Welcome to the Statistical Genetics Laboratory, headed by Prof. John Hardy.</description>
+    </item>
+    
+    <item>
+      <title>Search</title>
+      <link>https://Hardy-Lab-Statistical-Genetics.github.io/search/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://Hardy-Lab-Statistical-Genetics.github.io/search/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
