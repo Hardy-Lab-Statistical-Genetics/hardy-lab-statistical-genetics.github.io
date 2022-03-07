@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spark on Statistical Genetics</title>
+    <link>https://Hardy-Lab-Statistical-Genetics.github.io/tags/spark/</link>
+    <description>Recent content in Spark on Statistical Genetics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/tags/spark/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fast and Scalable Genomics Workflows with Spark</title>
+      <link>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</link>
+      <pubDate>Mon, 07 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</guid>
+      <description>Every seven months, the volume of genomics data doubles. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply Glow solution to create big data architectures to genomics data. Glow is built on Apache Spark and Delta Lake, two popular big data technologies for distributed data processing and storage.
+source: databricks.com</description>
+    </item>
+    
+  </channel>
+</rss>

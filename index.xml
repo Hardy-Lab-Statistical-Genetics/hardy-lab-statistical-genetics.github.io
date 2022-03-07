@@ -6,7 +6,137 @@
         <description>Recent content on Statistical Genetics</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 27 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Fast and Scalable Genomics Workflows with Spark</title>
+        <link>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</link>
+        <pubDate>Mon, 07 Mar 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</guid>
+        <description>&lt;img src="https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics.jpg" alt="Featured image of post Fast and Scalable Genomics Workflows with Spark" /&gt;
+&lt;script src=&#34;https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/index.en_files/tabwid/tabwid.css&#34; rel=&#34;stylesheet&#34; /&gt;
+
+
+&lt;p&gt;Every seven months, the volume of genomics data &lt;a href=&#34;https://glow.readthedocs.io/en/latest/introduction.html&#34;&gt;doubles&lt;/a&gt;. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply &lt;a href=&#34;https://glow.readthedocs.io/en/latest/index.html&#34;&gt;Glow&lt;/a&gt; solution to create big data architectures to genomics data.
+Glow is built on &lt;a href=&#34;https://spark.apache.org/&#34;&gt;Apache Spark&lt;/a&gt; and &lt;a href=&#34;https://delta.io/&#34;&gt;Delta Lake&lt;/a&gt;, two popular big data technologies for distributed data processing and storage.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;images/glow-1-0-image-1-rev.png&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;source: databricks.com&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;We try to read the last version of GRCh38 &lt;a href=&#34;https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/&#34;&gt;dbSNP&lt;/a&gt; and store it in delta format. To read VCF data, we need to open a Spark session with spark-shell and add dependencies. To add Glow and Delta dependencies to the Spark Session, first go to the Spark source directory, then run the command below.&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;./bin/spark-shell --master local[20]\ 
+  --packages io.projectglow:glow-spark3_2.12:1.1.2,io.delta:delta-core_2.12:1.0.1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To choose the delta.io version, you need to find a compatible version with your spark version.
+The proper delta version for your spark can be found in the table below.&lt;/p&gt;
+&lt;template id=&#34;0c7932f9-0af3-4a7c-8720-35f4b91324b5&#34;&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class=&#34;tabwid&#34;&gt;&lt;style&gt;.cl-e58a7a18{}.cl-e583d7b2{font-family:&#39;DejaVu Sans&#39;;font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-e583ed10{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-e5841bdc{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bdd{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841be6{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841be7{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841be8{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf0{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf1{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf2{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf3{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bfa{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class=&#39;cl-e58a7a18&#39;&gt;
+&lt;caption class=&#34;Table Caption&#34;&gt;
+&lt;p&gt;&lt;span id=&#34;tab:unnamed-chunk-3&#34;&gt;Table 1: &lt;/span&gt;Performance characteristics of sequence types&lt;/p&gt;
+&lt;/caption&gt;
+&lt;thead&gt;&lt;tr style=&#34;overflow-wrap:break-word;&#34;&gt;&lt;td class=&#34;cl-e5841bfa&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;Delta.Lake.version&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class=&#34;cl-e5841bf3&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;Apache.Spark.version&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style=&#34;overflow-wrap:break-word;&#34;&gt;&lt;td class=&#34;cl-e5841bdd&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;1.1.x&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class=&#34;cl-e5841bdc&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;3.2.x&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&#34;overflow-wrap:break-word;&#34;&gt;&lt;td class=&#34;cl-e5841bdd&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;1.0.x&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class=&#34;cl-e5841bdc&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;3.1.x&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&#34;overflow-wrap:break-word;&#34;&gt;&lt;td class=&#34;cl-e5841be6&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;0.7.x and 0.8.x&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class=&#34;cl-e5841be7&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;3.0.x&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&#34;overflow-wrap:break-word;&#34;&gt;&lt;td class=&#34;cl-e5841bf0&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;Below 0.7.0&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class=&#34;cl-e5841be8&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;2.4.2 - 2.4.&amp;lt;latest&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr style=&#34;overflow-wrap:break-word;&#34;&gt;&lt;td  colspan=&#34;2&#34;class=&#34;cl-e5841bf2&#34;&gt;&lt;p class=&#34;cl-e583ed10&#34;&gt;&lt;span class=&#34;cl-e583d7b2&#34;&gt;source: docs.delta.io&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class=&#34;flextable-shadow-host&#34; id=&#34;50a55c8f-7439-40e1-a700-17387e677ce1&#34;&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById(&#34;50a55c8f-7439-40e1-a700-17387e677ce1&#34;);
+var template = document.getElementById(&#34;0c7932f9-0af3-4a7c-8720-35f4b91324b5&#34;);
+var caption = template.content.querySelector(&#34;caption&#34;);
+if(caption) {
+  caption.style.cssText = &#34;display:block;text-align:center;&#34;;
+  var newcapt = document.createElement(&#34;p&#34;);
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: &#39;open&#39;});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+&lt;p&gt;Spark downloads jar file dependencies in &lt;code&gt;.ivy2/jars&lt;/code&gt; directory at your home.
+It is sufficient to add the jars directory to Spark if you do not want to download dependencies again.&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;./bin/spark-shell --master local[20] --jars &amp;quot;~/.ivy2/jars/*&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Because some fields of SNP data contain very large character content, it is better to increase the Java heap memory. Look in the conf folder in the Spark directory and
+add the following to &lt;code&gt;spark-defaults.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;yaml&#34;&gt;&lt;code&gt;spark.memory.offHeap.enabled     true
+spark.memory.offHeap.size        2048m&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We open the Scala REPL with a spark session after running the &lt;code&gt;spark-shell&lt;/code&gt;.
+Although the Spark Shell can be used to build Spark Scala API codes, it lacks the user-friendliness of IDEs. It’s much easier to write codes and then paste into the REPL. Using the &lt;code&gt;:paste&lt;/code&gt; command in the REPL provides a quick way to paste multiline codes.&lt;/p&gt;
+&lt;pre class=&#34;scala&#34;&gt;&lt;code&gt;scala&amp;gt; :paste
+// Entering paste mode (ctrl-D to finish)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To add the &lt;code&gt;VCF&lt;/code&gt; reader format to Spark, import the Glow library and register the Spark session.&lt;/p&gt;
+&lt;pre class=&#34;scala&#34;&gt;&lt;code&gt;import io.projectglow.Glow
+Glow.register(spark)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Below, the SNP data is read and some columns are renamed and selected.&lt;/p&gt;
+&lt;pre class=&#34;scala&#34;&gt;&lt;code&gt;val vcf_df = spark.read.format(&amp;quot;vcf&amp;quot;)
+  .load(&amp;quot;/data/array/mshoai/dbSNP38/00-All.vcf.gz&amp;quot;)
+  .withColumn(&amp;quot;ID&amp;quot;,explode(col(&amp;quot;names&amp;quot;)))
+  .drop(&amp;quot;names&amp;quot;,&amp;quot;genotypes&amp;quot;)
+  .select(
+    col(&amp;quot;contigName&amp;quot;).as(&amp;quot;CH&amp;quot;),
+    col(&amp;quot;start&amp;quot;).as(&amp;quot;POS&amp;quot;),
+    col(&amp;quot;ID&amp;quot;),
+    col(&amp;quot;end&amp;quot;).as(&amp;quot;END&amp;quot;),
+    col(&amp;quot;referenceAllele&amp;quot;).as(&amp;quot;REF&amp;quot;),
+    col(&amp;quot;alternateAlleles&amp;quot;).as(&amp;quot;ALT&amp;quot;)
+    )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Spark jobs are lazy. To see results, it needs some actions, like a simple &lt;code&gt;show&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;scala&#34;&gt;&lt;code&gt;vcf_df.show
+vcf_df.printSchema&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Delta Lake is a data format that is based on Apache Parquet but has been optimized for analytic tasks.
+To write data in delta format, use the below code.&lt;/p&gt;
+&lt;pre class=&#34;scala&#34;&gt;&lt;code&gt;vcf_df
+  .write
+  .mode(&amp;quot;overwrite&amp;quot;)
+  .format(&amp;quot;delta&amp;quot;)
+  .save(&amp;quot;/data/SNP_GRCh38.delta&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now data is ready to Play!&lt;/p&gt;
+&lt;pre class=&#34;scala&#34;&gt;&lt;code&gt;val snp = spark
+  .read
+  .format(&amp;quot;delta&amp;quot;)
+  .load(&amp;quot;/data/SNP_GRCh38.delta&amp;quot;)
+
+snp.groupBy(&amp;quot;CH&amp;quot;).count.show(30)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;refrences&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Refrences&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://glow.readthedocs.io/en/latest/introduction.html&#34;&gt;Introduction to Glow&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://databricks.com/blog/2021/03/09/glow-v1-0-0-next-generation-genome-wide-analytics.html&#34;&gt;Glow V1.0.0, Next Generation Genome Wide Analytics&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</description>
+        </item>
+        <item>
         <title>Introduction to ADNI Dataset</title>
         <link>https://Hardy-Lab-Statistical-Genetics.github.io/p/introduction-to-adni-dataset/</link>
         <pubDate>Sun, 27 Feb 2022 00:00:00 +0000</pubDate>

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Every seven months, the volume of genomics data doubles. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply Glow solution to create big data architectures to genomics data. Glow is built on Apache Spark and Delta Lake, two popular big data technologies for distributed data processing and storage.
+source: databricks.com'><title>Fast and Scalable Genomics Workflows with Spark</title>
+
+<link rel='canonical' href='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/'>
+
+<link rel="stylesheet" href="/scss/style.min.d4d00cb4aeb1b6e98ed71230ec35fa5f7d605cdb3c9c4945ab111daadba2335e.css"><meta property='og:title' content='Fast and Scalable Genomics Workflows with Spark'>
+<meta property='og:description' content='Every seven months, the volume of genomics data doubles. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply Glow solution to create big data architectures to genomics data. Glow is built on Apache Spark and Delta Lake, two popular big data technologies for distributed data processing and storage.
+source: databricks.com'>
+<meta property='og:url' content='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/'>
+<meta property='og:site_name' content='Statistical Genetics'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Spark' /><meta property='article:tag' content='Scala' /><meta property='article:published_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='og:image' content='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics.jpg' />
+<meta name="twitter:title" content="Fast and Scalable Genomics Workflows with Spark">
+<meta name="twitter:description" content="Every seven months, the volume of genomics data doubles. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply Glow solution to create big data architectures to genomics data. Glow is built on Apache Spark and Delta Lake, two popular big data technologies for distributed data processing and storage.
+source: databricks.com"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics.jpg' />
+    </head>
+    <body class="
+    article-page 
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "dark");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        on-phone--column extended
+    
+">
+    
+        <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/HLSG_hu6f1e770de8692a6f0398f0e8b27f6569_55425_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <h1 class="site-name"><a href="/">Statistical Genetics</a></h1>
+        <h2 class="site-description">Hardy Lab at UCL Queen Square Institute of Neurology.</h2></header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/papers/' >
+                
+                
+                    
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-analytics" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+  <line x1="9" y1="17" x2="9" y2="12" />
+  <line x1="12" y1="17" x2="12" y2="16" />
+  <line x1="15" y1="17" x2="15" y2="14" />
+</svg>
+
+                
+                <span>Papers</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/packages/' >
+                
+                
+                    
+                
+                
+                    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   class="icon icon-tabler icon-tabler-chevron-left"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   stroke-width="2"
+   stroke="currentColor"
+   fill="none"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="packages.svg"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="778"
+     inkscape:window-height="480"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="39.833333"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6" />
+  <path
+     stroke="none"
+     d="M0 0h24v24H0z"
+     id="path2" />
+  <polyline
+     points="15 6 9 12 15 18"
+     id="polyline4"
+     transform="matrix(-1,0,0,1,24.000041,0)" />
+</svg>
+
+                
+                <span>Packages</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/slides/' >
+                
+                
+                    
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-slideshow" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <line x1="15" y1="6" x2="15.01" y2="6" />
+  <rect x="3" y="3" width="18" height="14" rx="3" />
+  <path d="M3 13l4 -4a3 5 0 0 1 3 0l4 4" />
+  <path d="M13 12l2 -2a3 5 0 0 1 3 0l3 3" />
+  <line x1="8" y1="21" x2="8.01" y2="21" />
+  <line x1="12" y1="21" x2="12.01" y2="21" />
+  <line x1="16" y1="21" x2="16.01" y2="21" />
+</svg>
+
+                
+                <span>Slides</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://github.com/Ehyaei' >
+                
+                
+                    
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+                
+                <span>Github</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/members/' >
+                
+                
+                    
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>Members</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/' target="_blank">
+                
+                
+                    
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>Categories</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>Dark Mode</span>
+            </li>
+        
+    </ol>
+</aside>
+
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/fast-and-scalable-genomic-workflows-with-spark/">
+                <img src="/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics_huc02ed4e73c4ac8a7a18a8095611a84c8_156950_800x0_resize_q75_box.jpg"
+                        srcset="/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics_huc02ed4e73c4ac8a7a18a8095611a84c8_156950_800x0_resize_q75_box.jpg 800w, /p/fast-and-scalable-genomic-workflows-with-spark/images/genomics_huc02ed4e73c4ac8a7a18a8095611a84c8_156950_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="293" 
+                        loading="lazy"
+                        alt="Featured image of post Fast and Scalable Genomics Workflows with Spark" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/big-data/" >
+                Big-Data
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/fast-and-scalable-genomic-workflows-with-spark/">Fast and Scalable Genomics Workflows with Spark</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 07, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    
+<script src="https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/index.en_files/header-attrs/header-attrs.js"></script>
+<link href="https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/index.en_files/tabwid/tabwid.css" rel="stylesheet" />
+
+
+<p>Every seven months, the volume of genomics data <a href="https://glow.readthedocs.io/en/latest/introduction.html">doubles</a>. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply <a href="https://glow.readthedocs.io/en/latest/index.html">Glow</a> solution to create big data architectures to genomics data.
+Glow is built on <a href="https://spark.apache.org/">Apache Spark</a> and <a href="https://delta.io/">Delta Lake</a>, two popular big data technologies for distributed data processing and storage.</p>
+<div class="figure">
+<img src="images/glow-1-0-image-1-rev.png" alt="" />
+<p class="caption">source: databricks.com</p>
+</div>
+<p>We try to read the last version of GRCh38 <a href="https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/">dbSNP</a> and store it in delta format. To read VCF data, we need to open a Spark session with spark-shell and add dependencies. To add Glow and Delta dependencies to the Spark Session, first go to the Spark source directory, then run the command below.</p>
+<pre class="bash"><code>./bin/spark-shell --master local[20]\ 
+  --packages io.projectglow:glow-spark3_2.12:1.1.2,io.delta:delta-core_2.12:1.0.1</code></pre>
+<p>To choose the delta.io version, you need to find a compatible version with your spark version.
+The proper delta version for your spark can be found in the table below.</p>
+<template id="0c7932f9-0af3-4a7c-8720-35f4b91324b5"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style><div class="tabwid"><style>.cl-e58a7a18{}.cl-e583d7b2{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-e583ed10{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-e5841bdc{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bdd{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841be6{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841be7{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841be8{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf0{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf1{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf2{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bf3{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e5841bfa{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class='cl-e58a7a18'>
+<caption class="Table Caption">
+<p><span id="tab:unnamed-chunk-3">Table 1: </span>Performance characteristics of sequence types</p>
+</caption>
+<thead><tr style="overflow-wrap:break-word;"><td class="cl-e5841bfa"><p class="cl-e583ed10"><span class="cl-e583d7b2">Delta.Lake.version</span></p></td><td class="cl-e5841bf3"><p class="cl-e583ed10"><span class="cl-e583d7b2">Apache.Spark.version</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-e5841bdd"><p class="cl-e583ed10"><span class="cl-e583d7b2">1.1.x</span></p></td><td class="cl-e5841bdc"><p class="cl-e583ed10"><span class="cl-e583d7b2">3.2.x</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e5841bdd"><p class="cl-e583ed10"><span class="cl-e583d7b2">1.0.x</span></p></td><td class="cl-e5841bdc"><p class="cl-e583ed10"><span class="cl-e583d7b2">3.1.x</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e5841be6"><p class="cl-e583ed10"><span class="cl-e583d7b2">0.7.x and 0.8.x</span></p></td><td class="cl-e5841be7"><p class="cl-e583ed10"><span class="cl-e583d7b2">3.0.x</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-e5841bf0"><p class="cl-e583ed10"><span class="cl-e583d7b2">Below 0.7.0</span></p></td><td class="cl-e5841be8"><p class="cl-e583ed10"><span class="cl-e583d7b2">2.4.2 - 2.4.&lt;latest&gt;</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td  colspan="2"class="cl-e5841bf2"><p class="cl-e583ed10"><span class="cl-e583d7b2">source: docs.delta.io</span></p></td></tr></tfoot></table></div></template>
+<div class="flextable-shadow-host" id="50a55c8f-7439-40e1-a700-17387e677ce1"></div>
+<script>
+var dest = document.getElementById("50a55c8f-7439-40e1-a700-17387e677ce1");
+var template = document.getElementById("0c7932f9-0af3-4a7c-8720-35f4b91324b5");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script>
+
+<p>Spark downloads jar file dependencies in <code>.ivy2/jars</code> directory at your home.
+It is sufficient to add the jars directory to Spark if you do not want to download dependencies again.</p>
+<pre class="bash"><code>./bin/spark-shell --master local[20] --jars &quot;~/.ivy2/jars/*&quot;</code></pre>
+<p>Because some fields of SNP data contain very large character content, it is better to increase the Java heap memory. Look in the conf folder in the Spark directory and
+add the following to <code>spark-defaults.conf</code>:</p>
+<pre class="yaml"><code>spark.memory.offHeap.enabled     true
+spark.memory.offHeap.size        2048m</code></pre>
+<p>We open the Scala REPL with a spark session after running the <code>spark-shell</code>.
+Although the Spark Shell can be used to build Spark Scala API codes, it lacks the user-friendliness of IDEs. It’s much easier to write codes and then paste into the REPL. Using the <code>:paste</code> command in the REPL provides a quick way to paste multiline codes.</p>
+<pre class="scala"><code>scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)</code></pre>
+<p>To add the <code>VCF</code> reader format to Spark, import the Glow library and register the Spark session.</p>
+<pre class="scala"><code>import io.projectglow.Glow
+Glow.register(spark)</code></pre>
+<p>Below, the SNP data is read and some columns are renamed and selected.</p>
+<pre class="scala"><code>val vcf_df = spark.read.format(&quot;vcf&quot;)
+  .load(&quot;/data/array/mshoai/dbSNP38/00-All.vcf.gz&quot;)
+  .withColumn(&quot;ID&quot;,explode(col(&quot;names&quot;)))
+  .drop(&quot;names&quot;,&quot;genotypes&quot;)
+  .select(
+    col(&quot;contigName&quot;).as(&quot;CH&quot;),
+    col(&quot;start&quot;).as(&quot;POS&quot;),
+    col(&quot;ID&quot;),
+    col(&quot;end&quot;).as(&quot;END&quot;),
+    col(&quot;referenceAllele&quot;).as(&quot;REF&quot;),
+    col(&quot;alternateAlleles&quot;).as(&quot;ALT&quot;)
+    )</code></pre>
+<p>Spark jobs are lazy. To see results, it needs some actions, like a simple <code>show</code> function.</p>
+<pre class="scala"><code>vcf_df.show
+vcf_df.printSchema</code></pre>
+<p>Delta Lake is a data format that is based on Apache Parquet but has been optimized for analytic tasks.
+To write data in delta format, use the below code.</p>
+<pre class="scala"><code>vcf_df
+  .write
+  .mode(&quot;overwrite&quot;)
+  .format(&quot;delta&quot;)
+  .save(&quot;/data/SNP_GRCh38.delta&quot;)</code></pre>
+<p>Now data is ready to Play!</p>
+<pre class="scala"><code>val snp = spark
+  .read
+  .format(&quot;delta&quot;)
+  .load(&quot;/data/SNP_GRCh38.delta&quot;)
+
+snp.groupBy(&quot;CH&quot;).count.show(30)</code></pre>
+<div id="refrences" class="section level1">
+<h1>Refrences</h1>
+<ul>
+<li><a href="https://glow.readthedocs.io/en/latest/introduction.html">Introduction to Glow</a></li>
+<li><a href="https://databricks.com/blog/2021/03/09/glow-v1-0-0-next-generation-genome-wide-analytics.html">Glow V1.0.0, Next Generation Genome Wide Analytics</a></li>
+</ul>
+</div>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/spark/">Spark</a>
+        
+            <a href="/tags/scala/">Scala</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="Hardy-Lab-Statistical-Genetics.github/Hardy-Lab-Statistical-Genetics.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2022 Statistical Genetics
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.8.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
