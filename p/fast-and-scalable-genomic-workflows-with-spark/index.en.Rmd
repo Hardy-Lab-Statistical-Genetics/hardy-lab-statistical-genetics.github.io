@@ -90,7 +90,7 @@ Below, the SNP data is read and some columns are renamed and selected.
 
 ```{scala}
 val vcf_df = spark.read.format("vcf")
-  .load("/data/array/mshoai/dbSNP38/00-All.vcf.gz")
+  .load("./data/00-All.vcf.gz")
   .withColumn("ID",explode(col("names")))
   .drop("names","genotypes")
   .select(
@@ -117,7 +117,7 @@ vcf_df
   .write
   .mode("overwrite")
   .format("delta")
-  .save("/data/SNP_GRCh38.delta")
+  .save("./data/SNP_GRCh38.delta")
 ```
 
 Now data is ready to Play!
@@ -126,7 +126,7 @@ Now data is ready to Play!
 val snp = spark
   .read
   .format("delta")
-  .load("/data/SNP_GRCh38.delta")
+  .load("./data/SNP_GRCh38.delta")
 
 snp.groupBy("CH").count.show(30)
 ```
