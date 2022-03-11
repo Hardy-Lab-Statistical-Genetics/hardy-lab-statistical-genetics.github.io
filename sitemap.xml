@@ -3,27 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://Hardy-Lab-Statistical-Genetics.github.io/categories/big-data/</loc>
-    <lastmod>2022-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://Hardy-Lab-Statistical-Genetics.github.io/categories/</loc>
-    <lastmod>2022-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</loc>
-    <lastmod>2022-03-07T00:00:00+00:00</lastmod>
+    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/tags/hlsgutils/</loc>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/</loc>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://Hardy-Lab-Statistical-Genetics.github.io/post/</loc>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/tags/r/</loc>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/</loc>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/tags/</loc>
+    <lastmod>2022-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</loc>
     <lastmod>2022-03-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://Hardy-Lab-Statistical-Genetics.github.io/tags/scala/</loc>
     <lastmod>2022-03-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://Hardy-Lab-Statistical-Genetics.github.io/tags/spark/</loc>
-    <lastmod>2022-03-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/</loc>
-    <lastmod>2022-03-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://Hardy-Lab-Statistical-Genetics.github.io/tags/</loc>
     <lastmod>2022-03-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://Hardy-Lab-Statistical-Genetics.github.io/tags/adni/</loc>

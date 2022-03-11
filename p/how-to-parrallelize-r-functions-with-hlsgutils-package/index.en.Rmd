@@ -1,0 +1,121 @@
+---
+title: How to parrallelize R functions with HLSGUtils package?
+author: Ahmad Ehyaei
+date: '2022-03-11'
+slug: how-to-parrallelize-r-functions-with-hlsgutils-package
+categories:
+  - Big-Data
+tags:
+  - R
+  - HLSGUtils
+description: ~
+image: images/peakpx.jpg
+math: ~
+license: ~
+hidden: no
+comments: yes
+---
+
+Suppose we want to run different linear models on a dataset. We can write it with a for loop in R, but as a result of many R functions working with one core, this process, It will eventually run on one core and is time-consuming. Another solution is to use multiprocess packages in R, like `parallel`. These packages are very good, but the time of the executions does not decrease linearly when we increase the computation cores. One solution is that we run our code in parallel in different R sessions manually, like the `Jobs` option in Rstudio. At first glance, this idea is hard to implement because we need to have different R scripts and run them simultaneously. The `HLSGUtils` package provides some functions to make this work simpler with dynamic system resource management of memory and thread options.
+
+We will try to describe parallelization in `HLGSUtils` step-by-step. First, we need a base script that we want to run concurrently. A simple example is shown below.
+
+```{r, eval=FALSE, echo=TRUE}
+linear_fitter <- function(formula, n){
+  df <- data.frame(
+    y = rnorm(n, mean = 3),
+    x1 = rnorm(n),
+    x2 = rnorm(n),
+    x3 = rnorm(n)
+    )
+  
+  fit <- lm(as.formula(formula), data = df)
+  
+  write_rds(broom::tidy(fit),sprintf("~/Desktop/fittel_lm_%s.rds",n))
+  print(sprintf("%s modeling was done with %s samples!", formula, n))
+}
+```
+
+Save the script in some path like `~/Desktop/modeling.R`
+`linear_fitter` is only run in the R environment. We need to convert this function that is run from the command line.
+`function_to_Rscript` converts function to command line format. This function needs:
+
+- `function_from_source`: The path of the saved R function
+- `function_name`: The name of the function in the source file
+- `packages`: The packages that are needed to be called
+- `arguments`: Names of function arguments
+- `arguments_class`: arguments function class types
+- `script_save_path`: The generated R script path
+
+```{r, eval=FALSE, echo=TRUE}
+library(HLSGUtils)
+
+function_to_Rscript(
+  function_from_source = "~/Desktop/modeling.R",
+  function_name = "linear_fitter", 
+  packages = c("readr","broom"),
+  arguments = c("formula","n"),
+  arguments_class  = c("character","integer"),
+  script_save_path = "~/Desktop/modeling_r_script.R"
+  )
+```
+
+The resulted script is ready to run on the command line. 
+The converted code can be found below.
+
+```{r, eval=FALSE, echo=TRUE}
+############################################################
+#                      linear_fitter                       #
+############################################################
+
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) < 2){stop('I think you forgot your parameters')}
+
+formula <- args[1]
+n <- as.integer(args[2])
+
+flush.console()
+
+# Load Libraries
+suppressMessages(library(readr))
+suppressMessages(library(broom))
+source("~/Desktop/modeling.R")
+
+# Add Function Its Arguments
+linear_fitter(
+formula = formula,
+n = n
+)
+```
+
+`modeling_r_script.R` can be run in command line format by `Rscript --vanilla` command
+and set input arguments.
+
+```{bash}
+Rscript --vanilla ~/Desktop/modeling_r_script.R y~x1 100
+```
+
+After running the command, the result table is:
+
+```{r}
+readr::read_rds("~/Desktop/fittel_lm_100.rds")
+```
+
+Finally, we want to run multiple models in parallel. `parallel_rscripts` allows you to run R command line functions in parallel. It needs to set input arguments and system resource management thresholds.
+
+- `rscript_path`: The path of command line format script
+- `args`: list of function arguments
+- `used_memory_treshold`: The total percentage of system memory that is in use.
+- `used_cpu_treshold`: The total percentage of threads that is in use.
+- `sleep_time`: sleep time between two work in seconds
+
+```{r, echo=TRUE, eval=FALSE}
+sample_size = c(100, 200, 300)
+formulas = c("y~x1", "y~x1+x2", "y~x1+x2+x3")
+parallel_rscripts(
+  rscript_path = "~/Desktop/modeling_r_script.R",
+  args = list(formula = formulas, n = sample_size),
+  used_memory_treshold = 80,
+  used_cpu_treshold = 80,
+  sleep_time = 5 )
+```

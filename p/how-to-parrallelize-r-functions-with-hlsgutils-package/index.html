@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Every seven months, the volume of genomics data doubles. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply Glow solution to create big data architectures to genomics data. Glow is built on Apache Spark and Delta Lake, two popular big data technologies for distributed data processing and storage.
-source: databricks.com'><title>Fast and Scalable Genomics Workflows with Spark</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Suppose we want to run different linear models on a dataset. We can write it with a for loop in R, but as a result of many R functions working with one core, this process, It will eventually run on one core and is time-consuming. Another solution is to use multiprocess packages in R, like parallel. These packages are very good, but the time of the executions does not decrease linearly when we increase the computation cores.'><title>How to parrallelize R functions with HLSGUtils package?</title>
 
-<link rel='canonical' href='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/'>
+<link rel='canonical' href='https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/'>
 
-<link rel="stylesheet" href="/scss/style.min.d4d00cb4aeb1b6e98ed71230ec35fa5f7d605cdb3c9c4945ab111daadba2335e.css"><meta property='og:title' content='Fast and Scalable Genomics Workflows with Spark'>
-<meta property='og:description' content='Every seven months, the volume of genomics data doubles. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply Glow solution to create big data architectures to genomics data. Glow is built on Apache Spark and Delta Lake, two popular big data technologies for distributed data processing and storage.
-source: databricks.com'>
-<meta property='og:url' content='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/'>
+<link rel="stylesheet" href="/scss/style.min.d4d00cb4aeb1b6e98ed71230ec35fa5f7d605cdb3c9c4945ab111daadba2335e.css"><meta property='og:title' content='How to parrallelize R functions with HLSGUtils package?'>
+<meta property='og:description' content='Suppose we want to run different linear models on a dataset. We can write it with a for loop in R, but as a result of many R functions working with one core, this process, It will eventually run on one core and is time-consuming. Another solution is to use multiprocess packages in R, like parallel. These packages are very good, but the time of the executions does not decrease linearly when we increase the computation cores.'>
+<meta property='og:url' content='https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/'>
 <meta property='og:site_name' content='Statistical Genetics'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Spark' /><meta property='article:tag' content='Scala' /><meta property='article:published_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='og:image' content='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics.jpg' />
-<meta name="twitter:title" content="Fast and Scalable Genomics Workflows with Spark">
-<meta name="twitter:description" content="Every seven months, the volume of genomics data doubles. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply Glow solution to create big data architectures to genomics data. Glow is built on Apache Spark and Delta Lake, two popular big data technologies for distributed data processing and storage.
-source: databricks.com"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='R' /><meta property='article:tag' content='HLSGUtils' /><meta property='article:published_time' content='2022-03-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-11T00:00:00&#43;00:00'/><meta property='og:image' content='https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/images/peakpx.jpg' />
+<meta name="twitter:title" content="How to parrallelize R functions with HLSGUtils package?">
+<meta name="twitter:description" content="Suppose we want to run different linear models on a dataset. We can write it with a for loop in R, but as a result of many R functions working with one core, this process, It will eventually run on one core and is time-consuming. Another solution is to use multiprocess packages in R, like parallel. These packages are very good, but the time of the executions does not decrease linearly when we increase the computation cores."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/images/peakpx.jpg' />
     </head>
     <body class="
     article-page 
@@ -335,13 +332,13 @@ source: databricks.com"><meta name="twitter:card" content="summary_large_image">
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/fast-and-scalable-genomic-workflows-with-spark/">
-                <img src="/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics_huc02ed4e73c4ac8a7a18a8095611a84c8_156950_800x0_resize_q75_box.jpg"
-                        srcset="/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics_huc02ed4e73c4ac8a7a18a8095611a84c8_156950_800x0_resize_q75_box.jpg 800w, /p/fast-and-scalable-genomic-workflows-with-spark/images/genomics_huc02ed4e73c4ac8a7a18a8095611a84c8_156950_1600x0_resize_q75_box.jpg 1600w"
+            <a href="/p/how-to-parrallelize-r-functions-with-hlsgutils-package/">
+                <img src="/p/how-to-parrallelize-r-functions-with-hlsgutils-package/images/peakpx_hude971b94ce34b121bdc2a1e6bbdbd4df_215780_800x0_resize_q75_box.jpg"
+                        srcset="/p/how-to-parrallelize-r-functions-with-hlsgutils-package/images/peakpx_hude971b94ce34b121bdc2a1e6bbdbd4df_215780_800x0_resize_q75_box.jpg 800w, /p/how-to-parrallelize-r-functions-with-hlsgutils-package/images/peakpx_hude971b94ce34b121bdc2a1e6bbdbd4df_215780_1600x0_resize_q75_box.jpg 1600w"
                         width="800" 
-                        height="293" 
+                        height="640" 
                         loading="lazy"
-                        alt="Featured image of post Fast and Scalable Genomics Workflows with Spark" />
+                        alt="Featured image of post How to parrallelize R functions with HLSGUtils package?" />
                 
             </a>
         </div>
@@ -359,7 +356,7 @@ source: databricks.com"><meta name="twitter:card" content="summary_large_image">
     
 
     <h2 class="article-title">
-        <a href="/p/fast-and-scalable-genomic-workflows-with-spark/">Fast and Scalable Genomics Workflows with Spark</a>
+        <a href="/p/how-to-parrallelize-r-functions-with-hlsgutils-package/">How to parrallelize R functions with HLSGUtils package?</a>
     </h2>
 
     
@@ -377,7 +374,7 @@ source: databricks.com"><meta name="twitter:card" content="summary_large_image">
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Mar 07, 2022</time>
+                <time class="article-time--published">Mar 11, 2022</time>
             </div>
         
 
@@ -392,7 +389,7 @@ source: databricks.com"><meta name="twitter:card" content="summary_large_image">
 
 
                 <time class="article-time--reading">
-                    4 minute read
+                    3 minute read
                 </time>
             </div>
         
@@ -405,127 +402,96 @@ source: databricks.com"><meta name="twitter:card" content="summary_large_image">
     
     
     
-<script src="https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/index.en_files/header-attrs/header-attrs.js"></script>
-<link href="https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/index.en_files/tabwid/tabwid.css" rel="stylesheet" />
+<script src="https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/index.en_files/header-attrs/header-attrs.js"></script>
 
 
-<p>Every seven months, the volume of genomics data <a href="https://glow.readthedocs.io/en/latest/introduction.html">doubles</a>. As a result, scientists in this field face big data challenges such as data management and designing efficient algorithms. In this post, we will attempt to apply <a href="https://glow.readthedocs.io/en/latest/index.html">Glow</a> solution to create big data architectures to genomics data.
-Glow is built on <a href="https://spark.apache.org/">Apache Spark</a> and <a href="https://delta.io/">Delta Lake</a>, two popular big data technologies for distributed data processing and storage.</p>
-<div class="figure">
-<img src="images/glow-1-0-image-1-rev.png" alt="" />
-<p class="caption">source: databricks.com</p>
-</div>
-<p>We try to read the last version of GRCh38 <a href="https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/">dbSNP</a> and store it in delta format. To read VCF data, we need to open a Spark session with spark-shell and add dependencies. To add Glow and Delta dependencies to the Spark Session, first go to the Spark source directory, then run the command below.</p>
-<pre class="bash"><code>./bin/spark-shell --master local[20]\ 
-  --packages io.projectglow:glow-spark3_2.12:1.1.2,io.delta:delta-core_2.12:1.0.1</code></pre>
-<p>To choose the delta.io version, you need to find a compatible version with your spark version.
-The proper delta version for your spark can be found in the table below.</p>
-<template id="09b5f430-de93-4016-8753-2eaf6d9df848"><style>
-.tabwid table{
-  border-spacing:0px !important;
-  border-collapse:collapse;
-  line-height:1;
-  margin-left:auto;
-  margin-right:auto;
-  border-width: 0;
-  display: table;
-  margin-top: 1.275em;
-  margin-bottom: 1.275em;
-  border-color: transparent;
-}
-.tabwid_left table{
-  margin-left:0;
-}
-.tabwid_right table{
-  margin-right:0;
-}
-.tabwid td {
-    padding: 0;
-}
-.tabwid a {
-  text-decoration: none;
-}
-.tabwid thead {
-    background-color: transparent;
-}
-.tabwid tfoot {
-    background-color: transparent;
-}
-.tabwid table tr {
-background-color: transparent;
-}
-</style><div class="tabwid"><style>.cl-2808dc08{}.cl-2802ef64{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-2803022e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-280332c6{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-280332d0{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-28033384{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2803338e{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2803338f{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-28033390{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-28033398{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-28033399{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2803339a{width:140.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2803339b{width:123.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table class='cl-2808dc08'>
-<caption class="Table Caption">
-<p><span id="tab:unnamed-chunk-3">Table 1: </span>Performance characteristics of sequence types</p>
-</caption>
-<thead><tr style="overflow-wrap:break-word;"><td class="cl-2803339b"><p class="cl-2803022e"><span class="cl-2802ef64">Delta.Lake.version</span></p></td><td class="cl-2803339a"><p class="cl-2803022e"><span class="cl-2802ef64">Apache.Spark.version</span></p></td></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-280332d0"><p class="cl-2803022e"><span class="cl-2802ef64">1.1.x</span></p></td><td class="cl-280332c6"><p class="cl-2803022e"><span class="cl-2802ef64">3.2.x</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-280332d0"><p class="cl-2803022e"><span class="cl-2802ef64">1.0.x</span></p></td><td class="cl-280332c6"><p class="cl-2803022e"><span class="cl-2802ef64">3.1.x</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-28033384"><p class="cl-2803022e"><span class="cl-2802ef64">0.7.x and 0.8.x</span></p></td><td class="cl-2803338e"><p class="cl-2803022e"><span class="cl-2802ef64">3.0.x</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-28033390"><p class="cl-2803022e"><span class="cl-2802ef64">Below 0.7.0</span></p></td><td class="cl-2803338f"><p class="cl-2803022e"><span class="cl-2802ef64">2.4.2 - 2.4.&lt;latest&gt;</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td  colspan="2"class="cl-28033399"><p class="cl-2803022e"><span class="cl-2802ef64">source: docs.delta.io</span></p></td></tr></tfoot></table></div></template>
-<div class="flextable-shadow-host" id="6460303d-b6b5-4084-b30f-47624dbe9e59"></div>
-<script>
-var dest = document.getElementById("6460303d-b6b5-4084-b30f-47624dbe9e59");
-var template = document.getElementById("09b5f430-de93-4016-8753-2eaf6d9df848");
-var caption = template.content.querySelector("caption");
-if(caption) {
-  caption.style.cssText = "display:block;text-align:center;";
-  var newcapt = document.createElement("p");
-  newcapt.appendChild(caption)
-  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
-}
-var fantome = dest.attachShadow({mode: 'open'});
-var templateContent = template.content;
-fantome.appendChild(templateContent);
-</script>
-
-<p>Spark downloads jar file dependencies in <code>.ivy2/jars</code> directory at your home.
-It is sufficient to add the jars directory to Spark if you do not want to download dependencies again.</p>
-<pre class="bash"><code>./bin/spark-shell --master local[20] --jars &quot;~/.ivy2/jars/*&quot;</code></pre>
-<p>Because some fields of SNP data contain very large character content, it is better to increase the Java heap memory. Look in the conf folder in the Spark directory and
-add the following to <code>spark-defaults.conf</code>:</p>
-<pre class="yaml"><code>spark.memory.offHeap.enabled     true
-spark.memory.offHeap.size        2048m</code></pre>
-<p>We open the Scala REPL with a spark session after running the <code>spark-shell</code>.
-Although the Spark Shell can be used to build Spark Scala API codes, it lacks the user-friendliness of IDEs. It’s much easier to write codes and then paste into the REPL. Using the <code>:paste</code> command in the REPL provides a quick way to paste multiline codes.</p>
-<pre class="scala"><code>scala&gt; :paste
-// Entering paste mode (ctrl-D to finish)</code></pre>
-<p>To add the <code>VCF</code> reader format to Spark, import the Glow library and register the Spark session.</p>
-<pre class="scala"><code>import io.projectglow.Glow
-Glow.register(spark)</code></pre>
-<p>Below, the SNP data is read and some columns are renamed and selected.</p>
-<pre class="scala"><code>val vcf_df = spark.read.format(&quot;vcf&quot;)
-  .load(&quot;./data/00-All.vcf.gz&quot;)
-  .withColumn(&quot;ID&quot;,explode(col(&quot;names&quot;)))
-  .drop(&quot;names&quot;,&quot;genotypes&quot;)
-  .select(
-    col(&quot;contigName&quot;).as(&quot;CH&quot;),
-    col(&quot;start&quot;).as(&quot;POS&quot;),
-    col(&quot;ID&quot;),
-    col(&quot;end&quot;).as(&quot;END&quot;),
-    col(&quot;referenceAllele&quot;).as(&quot;REF&quot;),
-    col(&quot;alternateAlleles&quot;).as(&quot;ALT&quot;)
-    )</code></pre>
-<p>Spark jobs are lazy. To see results, it needs some actions, like a simple <code>show</code> function.</p>
-<pre class="scala"><code>vcf_df.show
-vcf_df.printSchema</code></pre>
-<p>Delta Lake is a data format that is based on Apache Parquet but has been optimized for analytic tasks.
-To write data in delta format, use the below code.</p>
-<pre class="scala"><code>vcf_df
-  .write
-  .mode(&quot;overwrite&quot;)
-  .format(&quot;delta&quot;)
-  .save(&quot;./data/SNP_GRCh38.delta&quot;)</code></pre>
-<p>Now data is ready to Play!</p>
-<pre class="scala"><code>val snp = spark
-  .read
-  .format(&quot;delta&quot;)
-  .load(&quot;./data/SNP_GRCh38.delta&quot;)
-
-snp.groupBy(&quot;CH&quot;).count.show(30)</code></pre>
-<div id="refrences" class="section level1">
-<h1>Refrences</h1>
+<p>Suppose we want to run different linear models on a dataset. We can write it with a for loop in R, but as a result of many R functions working with one core, this process, It will eventually run on one core and is time-consuming. Another solution is to use multiprocess packages in R, like <code>parallel</code>. These packages are very good, but the time of the executions does not decrease linearly when we increase the computation cores. One solution is that we run our code in parallel in different R sessions manually, like the <code>Jobs</code> option in Rstudio. At first glance, this idea is hard to implement because we need to have different R scripts and run them simultaneously. The <code>HLSGUtils</code> package provides some functions to make this work simpler with dynamic system resource management of memory and thread options.</p>
+<p>We will try to describe parallelization in <code>HLGSUtils</code> step-by-step. First, we need a base script that we want to run concurrently. A simple example is shown below.</p>
+<pre class="r"><code>linear_fitter &lt;- function(formula, n){
+  df &lt;- data.frame(
+    y = rnorm(n, mean = 3),
+    x1 = rnorm(n),
+    x2 = rnorm(n),
+    x3 = rnorm(n)
+    )
+  
+  fit &lt;- lm(as.formula(formula), data = df)
+  
+  write_rds(broom::tidy(fit),sprintf(&quot;~/Desktop/fittel_lm_%s.rds&quot;,n))
+  print(sprintf(&quot;%s modeling was done with %s samples!&quot;, formula, n))
+}</code></pre>
+<p>Save the script in some path like <code>~/Desktop/modeling.R</code>
+<code>linear_fitter</code> is only run in the R environment. We need to convert this function that is run from the command line.
+<code>function_to_Rscript</code> converts function to command line format. This function needs:</p>
 <ul>
-<li><a href="https://glow.readthedocs.io/en/latest/introduction.html">Introduction to Glow</a></li>
-<li><a href="https://databricks.com/blog/2021/03/09/glow-v1-0-0-next-generation-genome-wide-analytics.html">Glow V1.0.0, Next Generation Genome Wide Analytics</a></li>
+<li><code>function_from_source</code>: The path of the saved R function</li>
+<li><code>function_name</code>: The name of the function in the source file</li>
+<li><code>packages</code>: The packages that are needed to be called</li>
+<li><code>arguments</code>: Names of function arguments</li>
+<li><code>arguments_class</code>: arguments function class types</li>
+<li><code>script_save_path</code>: The generated R script path</li>
 </ul>
-</div>
+<pre class="r"><code>library(HLSGUtils)
+
+function_to_Rscript(
+  function_from_source = &quot;~/Desktop/modeling.R&quot;,
+  function_name = &quot;linear_fitter&quot;, 
+  packages = c(&quot;readr&quot;,&quot;broom&quot;),
+  arguments = c(&quot;formula&quot;,&quot;n&quot;),
+  arguments_class  = c(&quot;character&quot;,&quot;integer&quot;),
+  script_save_path = &quot;~/Desktop/modeling_r_script.R&quot;
+  )</code></pre>
+<p>The resulted script is ready to run on the command line.
+The converted code can be found below.</p>
+<pre class="r"><code>############################################################
+#                      linear_fitter                       #
+############################################################
+
+args &lt;- commandArgs(trailingOnly = TRUE)
+if (length(args) &lt; 2){stop(&#39;I think you forgot your parameters&#39;)}
+
+formula &lt;- args[1]
+n &lt;- as.integer(args[2])
+
+flush.console()
+
+# Load Libraries
+suppressMessages(library(readr))
+suppressMessages(library(broom))
+source(&quot;~/Desktop/modeling.R&quot;)
+
+# Add Function Its Arguments
+linear_fitter(
+formula = formula,
+n = n
+)</code></pre>
+<p><code>modeling_r_script.R</code> can be run in command line format by <code>Rscript --vanilla</code> command
+and set input arguments.</p>
+<pre class="bash"><code>Rscript --vanilla ~/Desktop/modeling_r_script.R y~x1 100</code></pre>
+<pre><code>## [1] &quot;y~x1 modeling was done with 100 samples!&quot;</code></pre>
+<p>After running the command, the result table is:</p>
+<pre class="r"><code>readr::read_rds(&quot;~/Desktop/fittel_lm_100.rds&quot;)</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   3.08      0.100     30.7   4.73e-52
+## 2 x1           -0.0125    0.0941    -0.133 8.95e- 1</code></pre>
+<p>Finally, we want to run multiple models in parallel. <code>parallel_rscripts</code> allows you to run R command line functions in parallel. It needs to set input arguments and system resource management thresholds.</p>
+<ul>
+<li><code>rscript_path</code>: The path of command line format script</li>
+<li><code>args</code>: list of function arguments</li>
+<li><code>used_memory_treshold</code>: The total percentage of system memory that is in use.</li>
+<li><code>used_cpu_treshold</code>: The total percentage of threads that is in use.</li>
+<li><code>sleep_time</code>: sleep time between two work in seconds</li>
+</ul>
+<pre class="r"><code>sample_size = c(100, 200, 300)
+formulas = c(&quot;y~x1&quot;, &quot;y~x1+x2&quot;, &quot;y~x1+x2+x3&quot;)
+parallel_rscripts(
+  rscript_path = &quot;~/Desktop/modeling_r_script.R&quot;,
+  args = list(formula = formulas, n = sample_size),
+  used_memory_treshold = 80,
+  used_cpu_treshold = 80,
+  sleep_time = 5 )</code></pre>
 
 </section>
 
@@ -534,9 +500,9 @@ snp.groupBy(&quot;CH&quot;).count.show(30)</code></pre>
     
     <section class="article-tags">
         
-            <a href="/tags/spark/">Spark</a>
+            <a href="/tags/r/">R</a>
         
-            <a href="/tags/scala/">Scala</a>
+            <a href="/tags/hlsgutils/">HLSGUtils</a>
         
     </section>
 
@@ -570,23 +536,23 @@ snp.groupBy(&quot;CH&quot;).count.show(30)</code></pre>
                 
                     
 <article class="has-image">
-    <a href="/p/how-to-parrallelize-r-functions-with-hlsgutils-package/">
+    <a href="/p/fast-and-scalable-genomic-workflows-with-spark/">
         
         
             <div class="article-image">
-                <img src="/p/how-to-parrallelize-r-functions-with-hlsgutils-package/images/peakpx.b9212dcb2109f5fb507bdec9ebb3a2c1_hude971b94ce34b121bdc2a1e6bbdbd4df_215780_250x150_fill_q75_box_smart1.jpg" 
+                <img src="/p/fast-and-scalable-genomic-workflows-with-spark/images/genomics.5fcfc54e0d279d827cdb214509fa966b_huc02ed4e73c4ac8a7a18a8095611a84c8_156950_250x150_fill_q75_box_smart1.jpg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
-                        alt="Featured image of post How to parrallelize R functions with HLSGUtils package?"
-                        data-key="how-to-parrallelize-r-functions-with-hlsgutils-package" 
-                        data-hash="md5-uSEtyyEJ9ftQe97J67OiwQ==">
+                        alt="Featured image of post Fast and Scalable Genomics Workflows with Spark"
+                        data-key="fast-and-scalable-genomic-workflows-with-spark" 
+                        data-hash="md5-X8/FTg0nnYJ82yFFCfqWaw==">
                 
             </div>
         
 
         <div class="article-details">
-            <h2 class="article-title">How to parrallelize R functions with HLSGUtils package?</h2>
+            <h2 class="article-title">Fast and Scalable Genomics Workflows with Spark</h2>
         </div>
     </a>
 </article>

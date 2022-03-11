@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Statistical Genetics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 11 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to parrallelize R functions with HLSGUtils package?</title>
+      <link>https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/</link>
+      <pubDate>Fri, 11 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/</guid>
+      <description>Suppose we want to run different linear models on a dataset. We can write it with a for loop in R, but as a result of many R functions working with one core, this process, It will eventually run on one core and is time-consuming. Another solution is to use multiprocess packages in R, like parallel. These packages are very good, but the time of the executions does not decrease linearly when we increase the computation cores.</description>
+    </item>
+    
     <item>
       <title>Fast and Scalable Genomics Workflows with Spark</title>
       <link>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</link>

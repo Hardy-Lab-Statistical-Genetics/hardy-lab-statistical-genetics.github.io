@@ -6,7 +6,106 @@
         <description>Recent content on Statistical Genetics</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 11 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>How to parrallelize R functions with HLSGUtils package?</title>
+        <link>https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/</link>
+        <pubDate>Fri, 11 Mar 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/</guid>
+        <description>&lt;img src="https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/images/peakpx.jpg" alt="Featured image of post How to parrallelize R functions with HLSGUtils package?" /&gt;
+&lt;script src=&#34;https://Hardy-Lab-Statistical-Genetics.github.io/p/how-to-parrallelize-r-functions-with-hlsgutils-package/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;Suppose we want to run different linear models on a dataset. We can write it with a for loop in R, but as a result of many R functions working with one core, this process, It will eventually run on one core and is time-consuming. Another solution is to use multiprocess packages in R, like &lt;code&gt;parallel&lt;/code&gt;. These packages are very good, but the time of the executions does not decrease linearly when we increase the computation cores. One solution is that we run our code in parallel in different R sessions manually, like the &lt;code&gt;Jobs&lt;/code&gt; option in Rstudio. At first glance, this idea is hard to implement because we need to have different R scripts and run them simultaneously. The &lt;code&gt;HLSGUtils&lt;/code&gt; package provides some functions to make this work simpler with dynamic system resource management of memory and thread options.&lt;/p&gt;
+&lt;p&gt;We will try to describe parallelization in &lt;code&gt;HLGSUtils&lt;/code&gt; step-by-step. First, we need a base script that we want to run concurrently. A simple example is shown below.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;linear_fitter &amp;lt;- function(formula, n){
+  df &amp;lt;- data.frame(
+    y = rnorm(n, mean = 3),
+    x1 = rnorm(n),
+    x2 = rnorm(n),
+    x3 = rnorm(n)
+    )
+  
+  fit &amp;lt;- lm(as.formula(formula), data = df)
+  
+  write_rds(broom::tidy(fit),sprintf(&amp;quot;~/Desktop/fittel_lm_%s.rds&amp;quot;,n))
+  print(sprintf(&amp;quot;%s modeling was done with %s samples!&amp;quot;, formula, n))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Save the script in some path like &lt;code&gt;~/Desktop/modeling.R&lt;/code&gt;
+&lt;code&gt;linear_fitter&lt;/code&gt; is only run in the R environment. We need to convert this function that is run from the command line.
+&lt;code&gt;function_to_Rscript&lt;/code&gt; converts function to command line format. This function needs:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;function_from_source&lt;/code&gt;: The path of the saved R function&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;function_name&lt;/code&gt;: The name of the function in the source file&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;packages&lt;/code&gt;: The packages that are needed to be called&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;arguments&lt;/code&gt;: Names of function arguments&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;arguments_class&lt;/code&gt;: arguments function class types&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;script_save_path&lt;/code&gt;: The generated R script path&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(HLSGUtils)
+
+function_to_Rscript(
+  function_from_source = &amp;quot;~/Desktop/modeling.R&amp;quot;,
+  function_name = &amp;quot;linear_fitter&amp;quot;, 
+  packages = c(&amp;quot;readr&amp;quot;,&amp;quot;broom&amp;quot;),
+  arguments = c(&amp;quot;formula&amp;quot;,&amp;quot;n&amp;quot;),
+  arguments_class  = c(&amp;quot;character&amp;quot;,&amp;quot;integer&amp;quot;),
+  script_save_path = &amp;quot;~/Desktop/modeling_r_script.R&amp;quot;
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The resulted script is ready to run on the command line.
+The converted code can be found below.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;############################################################
+#                      linear_fitter                       #
+############################################################
+
+args &amp;lt;- commandArgs(trailingOnly = TRUE)
+if (length(args) &amp;lt; 2){stop(&amp;#39;I think you forgot your parameters&amp;#39;)}
+
+formula &amp;lt;- args[1]
+n &amp;lt;- as.integer(args[2])
+
+flush.console()
+
+# Load Libraries
+suppressMessages(library(readr))
+suppressMessages(library(broom))
+source(&amp;quot;~/Desktop/modeling.R&amp;quot;)
+
+# Add Function Its Arguments
+linear_fitter(
+formula = formula,
+n = n
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;modeling_r_script.R&lt;/code&gt; can be run in command line format by &lt;code&gt;Rscript --vanilla&lt;/code&gt; command
+and set input arguments.&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;Rscript --vanilla ~/Desktop/modeling_r_script.R y~x1 100&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;y~x1 modeling was done with 100 samples!&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After running the command, the result table is:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;readr::read_rds(&amp;quot;~/Desktop/fittel_lm_100.rds&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 2 × 5
+##   term        estimate std.error statistic  p.value
+##   &amp;lt;chr&amp;gt;          &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;
+## 1 (Intercept)   3.08      0.100     30.7   4.73e-52
+## 2 x1           -0.0125    0.0941    -0.133 8.95e- 1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, we want to run multiple models in parallel. &lt;code&gt;parallel_rscripts&lt;/code&gt; allows you to run R command line functions in parallel. It needs to set input arguments and system resource management thresholds.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rscript_path&lt;/code&gt;: The path of command line format script&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;args&lt;/code&gt;: list of function arguments&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;used_memory_treshold&lt;/code&gt;: The total percentage of system memory that is in use.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;used_cpu_treshold&lt;/code&gt;: The total percentage of threads that is in use.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sleep_time&lt;/code&gt;: sleep time between two work in seconds&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sample_size = c(100, 200, 300)
+formulas = c(&amp;quot;y~x1&amp;quot;, &amp;quot;y~x1+x2&amp;quot;, &amp;quot;y~x1+x2+x3&amp;quot;)
+parallel_rscripts(
+  rscript_path = &amp;quot;~/Desktop/modeling_r_script.R&amp;quot;,
+  args = list(formula = formulas, n = sample_size),
+  used_memory_treshold = 80,
+  used_cpu_treshold = 80,
+  sleep_time = 5 )&lt;/code&gt;&lt;/pre&gt;
+</description>
+        </item>
+        <item>
         <title>Fast and Scalable Genomics Workflows with Spark</title>
         <link>https://Hardy-Lab-Statistical-Genetics.github.io/p/fast-and-scalable-genomic-workflows-with-spark/</link>
         <pubDate>Mon, 07 Mar 2022 00:00:00 +0000</pubDate>

@@ -6,7 +6,25 @@
     <description>Recent content in Tags on Statistical Genetics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 11 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Hardy-Lab-Statistical-Genetics.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HLSGUtils</title>
+      <link>https://Hardy-Lab-Statistical-Genetics.github.io/tags/hlsgutils/</link>
+      <pubDate>Fri, 11 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Hardy-Lab-Statistical-Genetics.github.io/tags/hlsgutils/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://Hardy-Lab-Statistical-Genetics.github.io/tags/r/</link>
+      <pubDate>Fri, 11 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Hardy-Lab-Statistical-Genetics.github.io/tags/r/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Scala</title>
       <link>https://Hardy-Lab-Statistical-Genetics.github.io/tags/scala/</link>
